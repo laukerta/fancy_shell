@@ -33,6 +33,10 @@ public class ShellState {
         return rootDirectory;
     }
 
+    void setRootDirectory(Directory rootDirectory) {
+        this.rootDirectory = rootDirectory;
+    }
+
     public Directory getWorkingDirectory() {
         return workingDirectory;
     }
