@@ -38,7 +38,7 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests!
-      - run: mvn integration-test
+      - run: mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install
 test:
   post:
     - bash <(curl -s https://codecov.io/bash)
