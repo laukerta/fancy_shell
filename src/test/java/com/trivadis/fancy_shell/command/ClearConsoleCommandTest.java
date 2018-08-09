@@ -18,6 +18,7 @@ public class ClearConsoleCommandTest extends TestBase {
 
     @Test
     void testExecute() {
+        
         // ARRANGE
 
         // ACT
