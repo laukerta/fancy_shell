@@ -5,30 +5,27 @@ import com.trivadis.fancy_shell.resource.File;
 
 public final class ExampleFileStructure {
 
-    private static Directory root;
 
     private ExampleFileStructure() {
     }
 
-    public static Directory getRoot() {
+    public static Directory build() {
 
-        if (root == null) {
-            root = new Directory("/");
+        Directory root = new Directory("/");
 
-            root.addResource(new File("a.out"));
-            root.addResource(new File("makefile"));
+        root.addResource(new File("a.out"));
+        root.addResource(new File("makefile"));
 
-            Directory sourcesDirectory = new Directory("sources");
-            sourcesDirectory.addResource(new File("main.c"));
+        Directory sourcesDirectory = new Directory("sources");
+        sourcesDirectory.addResource(new File("main.c"));
 
-            Directory inputDirectory = new Directory("input");
-            inputDirectory.addResource(new File("gamepad.c"));
-            inputDirectory.addResource(new File("gamepad.h"));
+        Directory inputDirectory = new Directory("input");
+        inputDirectory.addResource(new File("gamepad.c"));
+        inputDirectory.addResource(new File("gamepad.h"));
 
-            sourcesDirectory.addResource(inputDirectory);
+        sourcesDirectory.addResource(inputDirectory);
 
-            root.addResource(sourcesDirectory);
-        }
+        root.addResource(sourcesDirectory);
 
         return root;
     }
