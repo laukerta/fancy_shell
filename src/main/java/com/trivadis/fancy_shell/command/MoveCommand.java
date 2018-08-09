@@ -6,6 +6,7 @@ import com.trivadis.fancy_shell.resource.Directory;
 import com.trivadis.fancy_shell.resource.Resource;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class MoveCommand extends Command {
 
@@ -39,6 +40,19 @@ public class MoveCommand extends Command {
 
         if (destination == null) {
             throw new CommandException("Not directory on path " + destinationPath + " found!");
+        }
+
+        boolean isSourceParentOfDestination = Stream.iterate(
+                destination,
+                dir -> dir.getParent() != dir,
+                dir -> dir.getParent())
+                .filter(dir -> dir.equals(source))
+                .map(dir -> true)
+                .findFirst()
+                .orElse(false);
+
+        if (isSourceParentOfDestination) {
+            throw new CommandException("Source mustn't be destination or its parent!");
         }
 
         destination.addResource(source);
