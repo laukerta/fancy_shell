@@ -4,15 +4,14 @@ import java.util.*;
 
 public class Directory extends Resource {
 
-    private Directory parent;
     private List<Resource> resources;
 
     public Directory(String name) {
         super(name);
-        parent = this;
+        super.setParent(this);
         resources = new ArrayList<>(Arrays.asList(
                 new Link(".", this),
-                new Link("..", parent)));
+                new Link("..", this)));
     }
 
     public static Optional<Resource> findResource(Directory rootDirectory, Directory workingDirectory, String path) {
@@ -32,25 +31,15 @@ public class Directory extends Resource {
 
     public void addResource(Resource resource) {
 
-        if (resource.isDirectory()) {
-            addResource((Directory) resource);
-            return;
-        }
-
-        resources.add(resource);
-    }
-
-    public void addResource(Directory directory) {
-
-        Directory oldParent = directory.getParent();
+        Directory oldParent = resource.getParent();
 
         if (oldParent != null) {
-            oldParent.removeResource(directory);
+            oldParent.removeResource(resource);
         }
 
-        directory.setParent(this);
+        resource.setParent(this);
 
-        resources.add(directory);
+        resources.add(resource);
     }
 
     public Optional<Resource> findResource(String relativePath) {
@@ -69,22 +58,6 @@ public class Directory extends Resource {
         return maybeResource
                 .filter(Resource::isDirectory)
                 .flatMap(r -> ((Directory) r).findResource(pathElements[1]));
-    }
-
-    public Directory getParent() {
-        return parent;
-    }
-
-    public void setParent(Directory parent) {
-
-        this.parent = parent;
-
-        Link parentLink = (Link) resources.stream()
-                .filter(r -> "..".equals(r.getName()))
-                .findFirst()
-                .get();
-
-        parentLink.setReference(parent);
     }
 
     public List<Resource> getResources() {
@@ -118,5 +91,18 @@ public class Directory extends Resource {
 
     public void removeResource(Resource resource) {
         resources.remove(resource);
+    }
+
+    @Override
+    public void setParent(Directory parent) {
+
+        super.setParent(parent);
+
+        Link parentLink = (Link) resources.stream()
+                .filter(r -> "..".equals(r.getName()))
+                .findFirst()
+                .get();
+
+        parentLink.setReference(parent);
     }
 }
