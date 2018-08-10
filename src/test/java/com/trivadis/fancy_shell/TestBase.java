@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 
 public class TestBase {
 
+    //test comment
     protected static ShellState shellState;
     private static BufferedReader inputStreamMock;
 
