@@ -19,7 +19,8 @@ public class Shell {
             new VirtualCommand("exit", (shellState, arguments) -> shellState.setTerminate(true)),
             new ListContentCommand(),
             new ChangeDirectoryCommand(),
-            new ClearConsoleCommand()
+            new ClearConsoleCommand(),
+            new MoveContentCommand()
     );
 
     private ShellState state;
