@@ -3,14 +3,13 @@ package com.trivadis.fancy_shell.command;
 import com.trivadis.fancy_shell.TestBase;
 import com.trivadis.fancy_shell.exception.CommandException;
 import com.trivadis.fancy_shell.resource.Directory;
+import com.trivadis.fancy_shell.resource.Resource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MoveContentCommandTest extends TestBase {
 
@@ -47,9 +46,27 @@ public class MoveContentCommandTest extends TestBase {
                 .findResource("sources/input")
                 .get();
 
-        shellState.setWorkingDirectory(inputDirectory);
+        Resource srcRes = inputDirectory.findResource(shellState.getRootDirectory(), inputDirectory, "a.out")
+                .orElse(null);
 
-        assertTrue(shellState.getWorkingDirectory().getResources().contains("a.out"));
+        assertNotNull(srcRes);
+    }
+
+    @Test
+    void testExecute_absoluteSourceDirToAbsoluteDest() {
+        // ACT
+        command.execute(shellState, List.of("./sources/input", "./"));
+
+        // ARRANGE
+        Directory inputDirectory = (Directory) shellState
+                .getRootDirectory();
+
+        shellState.setWorkingDirectory(inputDirectory);
+        Resource srcRes = Directory.findResource(shellState.getRootDirectory(), inputDirectory, "input")
+                .orElse(null);
+
+        //assertTrue(shellState.getWorkingDirectory().getResources().contains(srcRes));
+        assertNotNull(srcRes);
     }
 
     @Test
@@ -64,8 +81,9 @@ public class MoveContentCommandTest extends TestBase {
                 .get();
 
         shellState.setWorkingDirectory(inputDirectory);
+        Resource srcRes = Directory.findResource(shellState.getRootDirectory(), inputDirectory, "a.out").get();
 
-        assertTrue(shellState.getWorkingDirectory().getResources().contains("a.out"));
+        assertTrue(shellState.getWorkingDirectory().getResources().contains(srcRes));
     }
 
     @Test
