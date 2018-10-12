@@ -32,6 +32,25 @@ public class ShellTest extends TestBase {
     }
 
     @Test
+    void testRun_assertChangeDirAnd_printCurrentDir() throws IOException {
+        // ARRANGE
+        when(shellState.getInputStreamReader().readLine())
+                .thenReturn("cd sources", "pwd", "exit");
+
+        // ACT
+        shell.run();
+
+        // ASSERT
+        assertTrue(shellState.isTerminate());
+
+        String[] lines = retrievePrintedLines();
+
+        assertEquals(2, lines.length);
+        assertEquals("user@host />user@host sources>sources", lines[0]);
+        assertEquals("user@host sources>", lines[1]);
+    }
+
+    @Test
     void testRun_exitShell() throws IOException {
         // ARRANGE
         when(shellState.getInputStreamReader().readLine()).thenReturn("exit");
