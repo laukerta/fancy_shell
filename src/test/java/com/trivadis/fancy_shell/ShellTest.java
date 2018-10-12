@@ -46,7 +46,7 @@ public class ShellTest extends TestBase {
         String[] lines = retrievePrintedLines();
 
         assertEquals(2, lines.length);
-        assertEquals("user@host />user@host sources>sources", lines[0]);
+        assertEquals("user@host />user@host sources>/sources", lines[0]);
         assertEquals("user@host sources>", lines[1]);
     }
 
